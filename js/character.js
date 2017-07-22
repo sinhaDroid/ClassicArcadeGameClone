@@ -10,17 +10,17 @@ $(function(){
     var characters = [catOne, catTwo, catThree];
 
     // char-boy is default character/player
-    catOne.css({'background-color': "red"}).addClass("active");
+    catOne.css({'background-color': "wheat"}).addClass("active");
     cat.setSprite();
 
     var resetCharBackground = function(){
         for (var i = 0; i < characters.length; i++) {
-            characters[i].animate({'background-color': "white"}, 0).removeClass("active");
+            characters[i].animate({'background-color': "#202020"}, 0).removeClass("active");
         }
     };
 
     var selectCharacter = function(that) {
-        $(that).animate({'background-color': "red"}, 1000).addClass("active");
+        $(that).animate({'background-color': "wheat"}, 1000).addClass("active");
         cat.setSprite();
     };
 

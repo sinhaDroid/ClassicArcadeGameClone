@@ -173,7 +173,7 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
 
-    function checkCollision() {
+    function checkCollisions() {
         /*
          * Check for the collision of two entities.
          * Function accepts two arguments.
@@ -249,15 +249,14 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/dog.png',
-        'images/cat-one.png',
-        'images/cat-two.png',
-        'images/cat-three.png',
-        'images/heart.png',
-        'images/rock.png',
-        'images/key.png',
+        'images/stat-heart.png',
+        'images/stat-gem.png',
         'images/gem-blue.png',
         'images/gem-green.png',
         'images/gem-orange.png',
+        'images/cat-one.png',
+        'images/cat-two.png',
+        'images/cat-three.png'
     ]);
     Resources.onReady(init);
 

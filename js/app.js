@@ -33,7 +33,7 @@ var constants = {
     // Player's start x-position on the canvas
     PLAYER_START_X : 300,
     // Player's start y-position on the canvas
-    PLAYER_START_Y : 470,
+    PLAYER_START_Y : 520,
     // Player movement distance
     PLAYER_MOVEMENT : 50,
     // X position array for game elements 
@@ -47,7 +47,7 @@ var constants = {
     // Right canvas boundary
     RIGHT_BOUNDARY : 600,
     // Bottom canvas boundary
-    BOTTOM_BOUNDARY : 470
+    BOTTOM_BOUNDARY : 520
 };
 
 $(document).ready(function() {
@@ -58,10 +58,26 @@ $(document).ready(function() {
     gameMusic.volume(0.3);
 
     // Hide the start screen on button click
+    $("#home").click(function() { 
+
+        // Hide the start screen
+        $("#startScreen").fadeIn('fast');
+
+        // Adjust background music volume
+        gameMusic.volume(0.3);
+        /* Unpause the game to allow the player to move around
+         * when arrow keys are pressed
+         */     
+        paused = true;
+
+        enableCharacterSelection();
+    });
+
+    // Hide the start screen on button click
     $("#playGame").click(function() { 
 
         // Hide the start screen
-        $("#startScreen").fadeOut('fast'); 
+        $("#startScreen").fadeOut('fast');
         
         // Play the select sound effect
         gameSelect.play();
@@ -73,6 +89,7 @@ $(document).ready(function() {
          * when arrow keys are pressed
          */
         paused = false;
+        disableCharacterSelection();
     });
 
     // Hide the game over screen on button click
@@ -88,7 +105,7 @@ $(document).ready(function() {
         /* Unpause the game to allow the player to move around
          * when arrow keys are pressed
          */     
-                paused = false;
+        paused = false;
     });
 
     // Show the how to play screen on click
@@ -304,69 +321,6 @@ Gems.prototype.reset = function() {
 // Instantiate a new Gems object
 var gems = new Gems();
 
-/* Level Class
- * This class is responsible for keeping track of and reseting the level.
- */
-var Level = function() {
-    this.level = 1;
-    dogs.spawn(2);
-    gems.spawn(2);
-};
-
-/* Update the level: 
- * - increase level
- * - spawn enemies
- * - reset collectable gems
- * - spawn a random amount of collectable gems
- * - reset player position 
- * - update level stat
- * - update the score
- * - play level up sound
- */
-Level.prototype.update = function() {
-    this.level++;
-    // Span enemies when the level is divisable by 2
-    if(this.level % 2) {
-        dogs.spawn(1);
-    }
-    gems.reset();
-    gems.spawn(getRandomInt(2,4));
-    cat.reset();
-    stats.updateLevel(this.level);
-    stats.updateScore();
-    levelUp.play();
-};
-
-/* Reset the level:
- * - reset to level 1 
- * - reset player
- * - reset enemies
- * - reset gem
- * - reset stats 
- * - update player lives
- * - spawn enemies
- * - play game over sound
- * - fade out the game music slightly
- * - pause the game to prevent player movement
- * - show game over screen
- */
-Level.prototype.reset = function() {
-    this.level = 1;
-    cat.reset();
-    dogs.reset();
-    gem.reset();
-    stats.reset();
-    cat.updateLives('add', 2); 
-    dogs.spawn(2);
-    gameOver.play();
-    gameMusic.fade(1.0, 0.3, 1000);
-    paused = true;
-    $("#gameOver").show();
-};
-
-// Instantiate a new level object
-var level = new Level();
-
 /* Player Class
  * This class is responsible for rendering the player, updating the
  * player's position on the canvas and updating the player's lives.
@@ -378,7 +332,9 @@ var Cat = function () {
 
     // The image/sprite for our cat, this uses
     // a helper we've provided to easily load images
-    this.setSprite();
+    // TODO:
+    // this.setSprite();
+    this.sprite = "images/cat-two.png"
 
     // Variables applied to each of our instances go here,
     this.x = constants.PLAYER_START_X;
@@ -442,7 +398,7 @@ Cat.prototype.render = function() {
 }
 
 // Handle Input Method to control hero
-Cat.prototype.handleInput = function (position) {
+Cat.prototype.handleInput = function (key) {
     // body...
     
     /* If the left arrow key is pressed and the 
@@ -480,6 +436,69 @@ Cat.prototype.handleInput = function (position) {
 
 // Place the cat object in a variable called cat
 var cat = new Cat();
+
+/* Level Class
+ * This class is responsible for keeping track of and reseting the level.
+ */
+var Level = function() {
+    this.level = 1;
+    dogs.spawn(2);
+    gems.spawn(2);
+};
+
+/* Update the level: 
+ * - increase level
+ * - spawn enemies
+ * - reset collectable gems
+ * - spawn a random amount of collectable gems
+ * - reset player position 
+ * - update level stat
+ * - update the score
+ * - play level up sound
+ */
+Level.prototype.update = function() {
+    this.level++;
+    // Span enemies when the level is divisable by 2
+    if(this.level % 2) {
+        dogs.spawn(1);
+    }
+    gems.reset();
+    gems.spawn(getRandomInt(2,4));
+    cat.reset();
+    stats.updateLevel(this.level);
+    stats.updateScore();
+    levelUp.play();
+};
+
+/* Reset the level:
+ * - reset to level 1 
+ * - reset player
+ * - reset enemies
+ * - reset gem
+ * - reset stats 
+ * - update player lives
+ * - spawn enemies
+ * - play game over sound
+ * - fade out the game music slightly
+ * - pause the game to prevent player movement
+ * - show game over screen
+ */
+Level.prototype.reset = function() {
+    this.level = 1;
+    cat.reset();
+    dogs.reset();
+    gem.reset();
+    stats.reset();
+    cat.updateLives('add', 2); 
+    dogs.spawn(2);
+    gameOver.play();
+    gameMusic.fade(1.0, 0.3, 1000);
+    paused = true;
+    $("#gameOver").show();
+};
+
+// Instantiate a new level object
+var level = new Level();
 
 
 /* Stats Class
@@ -593,4 +612,12 @@ document.addEventListener('keyup', function(e) {
  */
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+/* Returns a console log.
+ * Takes one or more expressions as parameters.
+ * Just to make logging to the console that much more simple :)
+ */
+function log(log) {
+     return console.log(log);
 }
