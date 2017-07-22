@@ -96,7 +96,7 @@ $(document).ready(function() {
     $("#playAgain").click(function() {
         
         // Hide the game over screen
-        $("#gameOver").hide()
+        $("#gameOver").hide();
         
         // Play the select sound effet
         gameSelect.play();
